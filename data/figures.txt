@@ -1,0 +1,5 @@
+circle 2.5
+rectangle 3 4
+circle 0.5
+rectangle 10 2.5
+circle 7
