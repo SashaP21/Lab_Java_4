@@ -1,4 +1,4 @@
-# Лабораторная работа № 3. Обработка исключений, работа с файлами и сериализация
+# Лабораторная работа № 4. Сборка проекта с Maven и модульное тестирование с JUnit
 
 ## **Автор:** Пустозёрова Александра Дмитриевна
 ## **Группа:** ФИТ-251
@@ -6,61 +6,67 @@
 ## Структура проекта
 
 ```text
-java-lab3/
+java-labs/
+├─ .mvn/
+│  └─ wrapper/
+│     └─ maven-wrapper.properties
 ├─ src/
-│  ├─ app/
-│  │  ├─ Main.java            
-│  ├─ geometry2d/
-│  │  ├─ Figure.java         
-│  │  ├─ Circle.java          
-│  │  └─ Rectangle.java       
-│  ├─ geometry3d/
-│  │  └─ Cylinder.java        
-│  ├─ exceptions/
-│  │  ├─ InvalidFigureException.java  
-│  │  └─ FigureFormatException.java   
-│  └─ storage/
-│     ├─ FigureStorage.java           
-│     ├─ TextFigureStorage.java       
-│     └─ SerializedFigureStorage.java 
-├─ data/                      
+│  ├─ main/
+│  │  └─ java/
+│  │     ├─ app/Main.java
+│  │     ├─ geometry2d/
+│  │     ├─ geometry3d/
+│  │     ├─ exceptions/
+│  │     └─ storage/
+│  └─ test/
+│     └─ java/
+│        ├─ geometry2d/
+│        │  ├─ CircleTest.java
+│        │  └─ RectangleTest.java
+│        └─ geometry3d/
+│           └─ CylinderTest.java
+├─ data/
+├─ pom.xml
+├─ mvnw
+├─ mvnw.cmd
 ├─ README.md
 └─ .gitignore
 ```
 
-## Сборка и запуск
+## Сборка, тестирование и запуск
 
-Из корня проекта:
-
-```bash
-javac -encoding UTF-8 -d out src/exceptions/*.java src/geometry2d/*.java src/geometry3d/*.java src/storage/*.java src/app/*.java
-```
-
-Приложение (аргументы: входной текстовый файл, выходной бинарный файл):
+Запуск тестов:
 
 ```bash
-java -cp out app.Main data/figures.txt output.figures.bin
+./mvnw.cmd test
 ```
 
-Без аргументов пути запрашиваются у пользователя:
+Очистка, компиляция, запуск тестов и сборка JAR:
 
 ```bash
-java -cp out app.Main
+./mvnw.cmd clean package
 ```
 
+Запуск программы (аргументы: входной текстовый файл, выходной бинарный файл):
 
-## Текстовый формат фигур
+```bash
+java -jar target/geometry-lab.jar data/figures.txt data/figures.bin
+```
 
-Одна строка - одна фигура. Разделитель - пробел,
-десятичный разделитель - точка. Регистр не важен, пустые строки пропускаются.
+Запуск программы без аргументов (пути запрашиваются у пользователя):
 
 ```text
-circle <радиус>
-rectangle <ширина> <высота>
+java -jar target/geometry-lab.jar  
 ```
 
-## Поведение при ошибках чтения
+## Проверка обнаружения ошибки:
 
-При ошибке приложение прерывает загрузку и выбрасывает FigureFormatException 
-(с вложенной причиной, например, NumberFormatException).
-Все уже прочитанные к этому моменту фигуры отбрасываются и не возвращаются.
+В классе Circle была внесена ошибка в методе perimeter: Math.PI * radius вместо 2 * Math.PI * radius
+
+![img.png](img.png)
+----------------------
+![img_1.png](img_1.png)
+
+После исправления ошибки:
+
+![img_2.png](img_2.png)
